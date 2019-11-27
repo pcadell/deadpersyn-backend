@@ -1,5 +1,5 @@
 
-# Dead Man's Switch (name tbd)
+# Deadpersyn (name tbd)
 ## user stories:
 * The user is someone who is entering a precarious period. They need information shared and are unsure they'll be able to do fulfill that sharing. If they can't, for whatever reason, they want messages delivered to their contacts. 
 * user can register, login, logout, update their account and delete their account
