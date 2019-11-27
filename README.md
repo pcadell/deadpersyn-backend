@@ -4,7 +4,7 @@
 * The user is someone who is entering a precarious period. They need information shared and are unsure they'll be able to do fulfill that sharing. If they can't, for whatever reason, they want messages delivered to their contacts. 
 * user can register, login, logout, update their account and delete their account
 * user has alarms that, when triggered, send personalized messages to a list of contacts 
-	* when writing an alarm, user can look at contacts currently assigned to their other alarms
+	* when creating an alarm, contact list is at hand
 * user has a switch that must be toggled somehow either before set time or by the end of the period of time (Update)
 * user create (C), can see their alarms (R), can update alarms (U), can delete their alarms (D)
 * if timer switch isn't hit in time, personalized emails are sent to contacts, timer is set to inactive
@@ -20,7 +20,7 @@
 * flask facilitates email: https://pythonprogramming.net/flask-email-tutorial/
 
 ## Data Models
-![Models](./models.png)
+![Models](./images/models.png)
 
 * User has:
 	* password: hashed string
@@ -43,21 +43,21 @@
 	* contact_id: fk Contact
 
 ## Wireframes
-![Registration Screen](./registration_screen.png)
+![Registration Screen](./images/registration_screen.png)
 
-![login screen](./login_screen.png)
+![login screen](./images/login_screen.png)
 
-![Landing Page](./user_show.png)
+![Landing Page](./images/user_show.png)
 
-![Create Message](./message_create.png)
+![Create Message](./images/message_create.png)
 
-![Edit Message](./message_edit.png)
+![Edit Message](./images/message_edit.png)
 
-![Contact Add](./contact_add.png)
+![Contact Add](./images/contact_add.png)
 
-![contact edit](./contact_edit.png)
+![contact edit](./images/contact_edit.png)
 
-![User edit](./edit_user.png)
+![User edit](./images/edit_user.png)
 
 ## Routes
 ### User CRUD
