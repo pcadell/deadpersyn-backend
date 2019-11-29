@@ -1,0 +1,6 @@
+.env
+node_modules
+Python.gitignore
+*.sqlite
+*.pyc
+config.cfg
