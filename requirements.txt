@@ -13,5 +13,7 @@ MarkupSafe==1.1.1
 peewee==3.12.0
 psycopg2==2.8.4
 pycparser==2.19
+python-crontab==2.4.0
+python-dateutil==2.8.1
 six==1.13.0
 Werkzeug==0.16.0
