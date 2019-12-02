@@ -23,7 +23,7 @@ class Contact(Model):
 class Alarm(Model):
 	content = CharField()
 	sender = ForeignKeyField(User, backref='alarms', on_delete='CASCADE')
-	time = DateTimeField()
+	time = DateTimeField(default=datetime.datetime.now)
 	sent = BooleanField(default=False)
 
 	class Meta:
