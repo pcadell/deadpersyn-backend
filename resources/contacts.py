@@ -13,7 +13,7 @@ def create_contact():
 	contact = models.Contact.create(sender=current_user.id, email=payload['email'], nickname=payload['nickname'])
 	contact_dict = model_to_dict(contact)
 	contact_dict['sender'].pop('password')
-	return jsonify(data=contact_dict, status={'code': 201, 'message': 'Successfully created a contact for {}!'.format(contact_dict['nickname'])})
+	return jsonify(data=contact_dict, status={'code': 201, 'message': 'Successfully created a contact for {}!'.format(contact_dict['nickname'])}), 201
 
 
 # index route for contacts entries
@@ -25,7 +25,7 @@ def contacts_index():
 		contact['sender'].pop('password')
 	print(contacts)
 
-	return jsonify(data=contacts, status={'code': 200, 'message': 'Successfully returned contacts this user.'})
+	return jsonify(data=contacts, status={'code': 200, 'message': 'Successfully returned contacts this user.'}), 200
 
 # show route for user's contact entry
 @contacts.route('/<id>', methods=['GET'])
@@ -35,9 +35,9 @@ def contact_show(id):
 	if (contact_to_show.sender.id == current_user.id):
 		contact_dict = model_to_dict(contact_to_show)
 		contact_dict['sender'].pop('password')
-		return jsonify(data=contact_dict, status={'code': 200, 'message': 'Successfully returned contact for {}'.format(contact_dict['nickname'])})
+		return jsonify(data=contact_dict, status={'code': 200, 'message': 'Successfully returned contact for {}'.format(contact_dict['nickname'])}), 200
 	else: 
-		return jsonify(data='Forbidden', status={'code': 403, 'message': 'User can only see their own contacts. Log in and try again.'})
+		return jsonify(data='Forbidden', status={'code': 403, 'message': 'User can only see their own contacts. Log in and try again.'}), 403
 
 # update route for user's contact entry
 @contacts.route('/<id>', methods=['PUT'])
@@ -51,9 +51,9 @@ def contact_update(id):
 		contact_to_update.save()
 		contact_dict = model_to_dict(contact_to_update)
 		contact_dict['sender'].pop('password')
-		return jsonify(data=contact_dict, status={'code': 201, 'message': 'Successfully updated contact entry for {}'.format(contact_dict['nickname'])})
+		return jsonify(data=contact_dict, status={'code': 201, 'message': 'Successfully updated contact entry for {}'.format(contact_dict['nickname'])}), 201
 	else:
-		return jsonify(data='Forbidden', status={'code': 403, 'message': 'User can only see their own contacts. Log in and try again.'})
+		return jsonify(data='Forbidden', status={'code': 403, 'message': 'User can only see their own contacts. Log in and try again.'}), 403
 
 # delete route for user's contact
 @contacts.route('/<id>', methods=['DELETE'])
@@ -63,4 +63,6 @@ def contact_delete(id):
 	if (contact_to_delete.sender.id == current_user.id):
 		contact_dict = model_to_dict(contact_to_delete)['nickname']
 		contact_to_delete.delete_instance()
-		return jsonify(data={}, status={'code': 200, 'message': 'Successfully deleted contact entry for {}'.format(contact_dict)})
+		return jsonify(data={}, status={'code': 200, 'message': 'Successfully deleted contact entry for {}'.format(contact_dict)}), 200
+	else:
+		return jsonify(data=Forbidden, status={'code': 403, 'message': 'User can only delete their own contacts. Log in and try again.'})
