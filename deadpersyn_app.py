@@ -64,7 +64,8 @@ def index():
 		return str(e)
 
 # mail functionality should expand to a 'show route' where a specific message is sent when this route is hit
-# @app.route('/<id>') # with message id being accessed and construction of message 
+# @app.route('/<id>') # with message id being used to access the content of the email (Alarm route), recipient ids (using that 
+# alarm id) and then finding contacts entries
 
 
 if __name__ == '__main__':

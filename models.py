@@ -40,5 +40,5 @@ class Recipient(Model):
 def initialize():
 	DATABASE.connect()
 	DATABASE.create_tables([User, Contact, Alarm, Recipient], safe=True)
-	print("Created talbes if they weren't already there!")
+	print("Created tables if they weren't already there!")
 	DATABASE.close()
