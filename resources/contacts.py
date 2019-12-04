@@ -20,12 +20,16 @@ def create_contact():
 @contacts.route('/', methods=['GET'])
 @login_required
 def contacts_index():
-	contacts = [model_to_dict(contacts) for contacts in models.Contact.select() if contacts.sender.id == current_user.id]
-	for contact in contacts:
-		contact['sender'].pop('password')
-	print(contacts)
+	try:
+		contacts = [model_to_dict(contacts) for contacts in models.Contact.select() if contacts.sender.id == current_user.id]
+		for contact in contacts:
+			contact['sender'].pop('password')
+		print(contacts)
 
-	return jsonify(data=contacts, status={'code': 200, 'message': 'Successfully returned contacts this user.'}), 200
+		return jsonify(data=contacts, status={'code': 200, 'message': 'Successfully returned contacts this user.'}), 200
+	except model.DoesNotExist:
+		return jsonify(data={}, status={'code': 401, 'message': 'Error getting the resources'}), 401
+
 
 # show route for user's contact entry
 @contacts.route('/<id>', methods=['GET'])

@@ -37,13 +37,13 @@ def alarm_create():
 	alarm_dict['sender'].pop('password')
 	# not subscriptable: alarmTime = models.Alarm.get_by_id(alarm_dict['id'])['time']
 	# can't insert string into datetime for cron set: alarm_dict['time']
-	setTime = datetime(alarm_dict['time'])
+#	setTime = datetime(alarm_dict['time'])
 
-	USER = os.getlogin()
-	createJob = CronTab(user=USER)
-	job = createJob.new(command='wget http://127.0.0.1:5000/send-mail', comment='{} message id'.format(USER)) # message id where send-mail is in path
-	job.setall(datetime(setTime))
-	createJob.write()
+#	USER = os.getlogin()
+#	createJob = CronTab(user=USER)
+#	job = createJob.new(command='wget http://127.0.0.1:5000/send-mail', comment='{} message id'.format(USER)) # message id where send-mail is in path
+#	job.setall(datetime(setTime))
+#	createJob.write()
 	# logic for setting a crontab before the return
 	return jsonify(data=alarm_dict, status={'code': 201, 'message': 'Successfully created alarm'}), 201
 
@@ -54,6 +54,7 @@ def alarm_show(id):
 	alarm = models.Alarm.get_by_id(id)
 	# login_required won't work if I'm starting the app only long enough to send an email and from the backend
 	if (alarm.sender.id == current_user.id):
+
 		alarm_dict = model_to_dict(alarm)
 		alarm_dict['sender'].pop('password') # overkill if folks are only supposed to be seeing their own alarms once they are logged in?
 		return jsonify(data=alarm_dict, status={'code':200, 'message': 'Found alarm!'}), 200
