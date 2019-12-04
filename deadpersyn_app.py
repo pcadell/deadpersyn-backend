@@ -3,7 +3,8 @@ from flask_mail import Mail, Message
 from flask_cors import CORS
 from flask_login import LoginManager
 import models
-
+from playhouse.shortcuts import model_to_dict
+import datetime
 from resources.users import users
 from resources.contacts import contacts
 from resources.alarms import alarms
@@ -46,26 +47,32 @@ def after_request(response):
 	g.db.close()
 	return response
 
-@app.route('/test', methods=['GET'])
-def test_route():
-	return ['Here\'s the test route']
-
-
-# test path to send mail when this path is hit
-@app.route('/send-mail')
-def index():
+# testing db calls to build email
+@app.route('/<alarm_id>') # message id comes from the alarm being set
+def index(alarm_id):
 	try:
-		msg = Message('Hey there', recipients=['wafawot205@topmail2.net'])
-		msg.body = 'Yo!\n this worked?'
+		alarm = models.Alarm.get_by_id(alarm_id)		
+		alarm_to_dict = model_to_dict(alarm) # logic for taking message id to find the user's email and store that
+		content = alarm_to_dict['content'] # logic for taking the message id and grabbing the content
+		sender = alarm_to_dict['sender']
+		del sender['password']
+		recipients_dicts = [model_to_dict(recipients) for recipients in models.Recipient.select().where(models.Recipient.alarm == alarm_id)] # message id used to grab contact id's from recipients entries
+		contacts_ids = []
+
+		for recipient in recipients_dicts:
+			(contacts_ids.append(recipient['contact']['id']))
+		contacts = [models.Contact.get_by_id(contacts_id) for contacts_id in contacts_ids]
+		contact_dicts = [model_to_dict(contact) for contact in contacts] # now I can get nickname and email easy
+		emails = [contact_dict['email'] for contact_dict in contact_dicts]
+		nicknames = [contact_dict['nickname'] for contact_dict in contact_dicts]
+
+		msg = Message('Hey there, a message from {}'.format(sender['username']), recipients=emails)
+		msg.body = content
 		mail.send(msg)
-		return 'Is this the message that is the return for mail_app.py signalling sent message? If so, it is placed in a text file in the dir it is called from and could be useful, could contain variable information about specific message sent for later use?'
-	
+		return 'A message was sent on behalf of {} to {}.'.format(sender['username'], nicknames)
 	except Exception as e:
 		return str(e)
 
-# mail functionality should expand to a 'show route' where a specific message is sent when this route is hit
-# @app.route('/<id>') # with message id being used to access the content of the email (Alarm route), recipient ids (using that 
-# alarm id) and then finding contacts entries
 
 
 if __name__ == '__main__':

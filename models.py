@@ -8,7 +8,10 @@ class User(UserMixin, Model):
 	username = CharField(unique = True)
 	email = CharField(unique = True)
 	password = CharField()
-
+	# should hold email server information:
+	# email_pass, or should that be same as password above?
+	# email_settings including encryption, port, smtp address?
+	# or maybe these get set into environmental variable to be reset if something changes?
 	class Meta:
 		database = DATABASE
 

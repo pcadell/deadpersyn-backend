@@ -1,1 +1,0 @@
-Is this the message that is the return for mail_app.py signalling sent message? If so, it is placed in a text file in the dir it is called from and could be useful, could contain variable information about specific message sent for later use?
