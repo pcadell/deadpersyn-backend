@@ -69,6 +69,9 @@ def index(alarm_id):
 		msg = Message('Hey there, a message from {}'.format(sender['username']), recipients=emails)
 		msg.body = content
 		mail.send(msg)
+
+		alarm.sent = True
+		alarm.save()
 		return 'A message was sent on behalf of {} to {}.'.format(sender['username'], nicknames)
 	except Exception as e:
 		return str(e)
