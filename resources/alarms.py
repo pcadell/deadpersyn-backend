@@ -1,6 +1,7 @@
 import models
 import os
-from datetime import datetime, timezone
+import datetime
+from dateutil.parser import *
 from crontab import CronTab
 from flask import request, jsonify, Blueprint
 from flask_login import current_user, login_required
@@ -37,13 +38,14 @@ def alarm_create():
 	alarm_dict['sender'].pop('password')
 	# not subscriptable: alarmTime = models.Alarm.get_by_id(alarm_dict['id'])['time']
 	# can't insert string into datetime for cron set: alarm_dict['time']
-#	setTime = datetime(alarm_dict['time'])
-
-#	USER = os.getlogin()
-#	createJob = CronTab(user=USER)
-#	job = createJob.new(command='wget http://127.0.0.1:5000/send-mail', comment='{} message id'.format(USER)) # message id where send-mail is in path
-#	job.setall(datetime(setTime))
-#	createJob.write()
+	setTime = isoparse(alarm_dict['time'])
+#	dt_obj = datetime(setTime)
+	alarm_id = alarm_dict['id']
+	USER = os.getlogin()
+	createJob = CronTab(user=USER)
+	job = createJob.new(command='wget http://127.0.0.1:5000/{}'.format(alarm_id), comment='{} message {}'.format(USER, alarm_id)) # message id where send-mail is in path
+	job.setall(setTime)  #datetime(setTime))
+	createJob.write()
 	# logic for setting a crontab before the return
 	return jsonify(data=alarm_dict, status={'code': 201, 'message': 'Successfully created alarm'}), 201
 
