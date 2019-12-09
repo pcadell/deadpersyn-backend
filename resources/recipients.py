@@ -15,11 +15,15 @@ recipients = Blueprint('recipients', 'recipients')
 def recipient_create():
 	payload = request.get_json()
 	# list of alarms and contacts will be limited on the front end by user affiliation
-	recipient = models.Recipient.create(contact=payload['contact'], alarm=payload['alarm'])
-	recipient_dict = model_to_dict(recipient)
-	recipient_dict['alarm']['sender'].pop('password')
-	recipient_dict['contact']['sender'].pop('password')
-	return jsonify(data=recipient_dict, status={'code': 200, 'message': 'Successfully created message recipient entry with an id of {}'.format(recipient_dict['id'])}), 200
+	print(payload)
+#	recipients = [payload['recipient'] for recipients in payload]
+#	
+	recipients = [models.Recipient.create(contact=contactId, alarm=payload['alarm']) for contactId in payload['recipients']]
+	recipient_dicts = [model_to_dict(recipient) for recipient in recipients]
+	for recipient in recipient_dicts:
+	 	recipient['alarm']['sender'].pop('password')
+	 	recipient['contact']['sender'].pop('password')
+	return jsonify(data=recipient_dicts, status={'code': 200, 'message': 'Successfully created message recipient entries.'}), 200
 
 # recipient index route
 @recipients.route('/', methods=['GET'])
