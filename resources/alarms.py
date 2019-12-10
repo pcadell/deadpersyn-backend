@@ -90,6 +90,11 @@ def alarm_update(id):
 def alarm_delete(id):
 	alarm_to_delete = models.Alarm.get_by_id(id)
 	if (alarm_to_delete.sender.id == current_user.id):
+		USER = os.getlogin()
+		deleteJob = CronTab(user=USER)
+	#	job = deleteJob.find_comment('{} message {}'.format(USER, id))
+		deleteJob.remove_all(comment = '{} message {}'.format(USER, id))
+		deleteJob.write()		
 		alarm_to_delete.delete_instance()
 		return jsonify(data='Alarm successfully deleted!', status={'code':200, 'message': 'Alarm successfully deleted!'}), 200
 	else:
