@@ -9,6 +9,8 @@ from resources.users import users
 from resources.contacts import contacts
 from resources.alarms import alarms
 from resources.recipients import recipients
+from crontab import CronTab
+import os
 
 app = Flask(__name__)
 app.config.from_envvar('APP_SETTINGS') #pointing to config file set in environs
@@ -72,6 +74,9 @@ def index(alarm_id):
 
 		alarm.sent = True
 		alarm.save()
+
+		# logic to remove crontab job
+
 		return 'A message was sent on behalf of {} to {}.'.format(sender['username'], nicknames)
 	except Exception as e:
 		return str(e)

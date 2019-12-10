@@ -43,8 +43,12 @@ def alarm_create():
 	alarm_id = alarm_dict['id']
 	USER = os.getlogin()
 	createJob = CronTab(user=USER)
-	job = createJob.new(command='wget http://127.0.0.1:5000/{}'.format(alarm_id), comment='{} message {}'.format(USER, alarm_id)) # message id where send-mail is in path
-	job.setall(setTime)  #datetime(setTime))
+	job = createJob.new(command='wget http://127.0.0.1:8000/{}'.format(alarm_id), comment='{} message {}'.format(USER, alarm_id)) # message id where send-mail is in path
+	
+# set the time to crontab via math 
+	timediffCST = datetime.timedelta(hours=-6)
+	correctedTime = setTime + timediffCST
+	job.setall(correctedTime)  #datetime(setTime))
 	createJob.write()
 	# logic for setting a crontab before the return
 	return jsonify(data=alarm_dict, status={'code': 201, 'message': 'Successfully created alarm'}), 201
