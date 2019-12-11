@@ -75,7 +75,7 @@ def alarm_update(id):
 	payload = request.get_json()
 	if (alarm.sender.id == current_user.id):
 		alarm.content = payload['content'] if 'content' in payload else None
-	#	alarm.time = payload['time'] if 'time' in payload else None  # will change this to take datetime object once front end is added
+		alarm.time = payload['time'] if 'time' in payload else None 
 		alarm.save()
 		alarm_dict = model_to_dict(alarm)
 		alarm_dict['sender'].pop('password')

@@ -2,7 +2,7 @@ import datetime
 from peewee import *
 from flask_login import UserMixin
 
-DATABASE = SqliteDatabase('deadpersyn.sqlite')
+DATABASE = SqliteDatabase('deadpersyn.sqlite', pragmas={'foreign_keys': 1})
 
 class User(UserMixin, Model):
 	username = CharField(unique = True)
@@ -17,7 +17,7 @@ class User(UserMixin, Model):
 
 class Contact(Model):
 	email = CharField()
-	sender = ForeignKeyField(User, backref='contacts', on_delete='CASCADE')
+	sender = ForeignKeyField(User, backref='contacts', on_delete='Cascade')
 	nickname = CharField()
 
 	class Meta:
@@ -25,7 +25,7 @@ class Contact(Model):
 
 class Alarm(Model):
 	content = CharField()
-	sender = ForeignKeyField(User, backref='alarms', on_delete='CASCADE')
+	sender = ForeignKeyField(User, backref='alarms', on_delete='Cascade')
 	time = DateTimeField(default=datetime.datetime.now)
 	sent = BooleanField(default=False)
 
@@ -33,8 +33,8 @@ class Alarm(Model):
 		database = DATABASE
 
 class Recipient(Model):
-	contact = ForeignKeyField(Contact, backref='recipients', on_delete='CASCADE')
-	alarm = ForeignKeyField(Alarm, backref='recipients', on_delete='CASCADE')
+	contact = ForeignKeyField(Contact, backref='recipients', on_delete='Cascade')
+	alarm = ForeignKeyField(Alarm, backref='recipients', on_delete='Cascade')
 
 	class Meta:
 		database = DATABASE

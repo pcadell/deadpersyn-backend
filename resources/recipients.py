@@ -25,12 +25,26 @@ def recipient_create():
 	 	recipient['contact']['sender'].pop('password')
 	return jsonify(data=recipient_dicts, status={'code': 200, 'message': 'Successfully created message recipient entries.'}), 200
 
+# recipient index route with delimiter of what alarm is present
+# @recipients.route('/<id>', methods=['GET'])
+# @login_required
+# def recipients_index(id):
+# 	try:
+# 		recipients = [model_to_dict(recipients) for recipients in models.Recipient.select() if recipients.alarm.id == id]
+# 		for recipient_dict in recipients:
+# 				recipient_dict['alarm']['sender'].pop('password')
+# 				recipient_dict['contact']['sender'].pop('password')
+# 		return jsonify(data=recipients, status={'code': 201, 'message': 'Successfully showing all recipients atm.'}), 201
+# 	except models.DoesNotExist:
+# 		return jsonify(data={}, status={'code': 401, 'message': 'Error getting the resources'}), 401
+
+
 # recipient index route
 @recipients.route('/', methods=['GET'])
 @login_required
 def recipients_index():
 	try:
-		recipients = [model_to_dict(recipients) for recipients in models.Recipient.select() if current_user.id == recipients.contact.sender.id]
+		recipients = [model_to_dict(recipient) for recipient in models.Recipient.select() if current_user.id == recipient.contact.sender.id]
 		for recipient_dict in recipients:
 				recipient_dict['alarm']['sender'].pop('password')
 				recipient_dict['contact']['sender'].pop('password')
