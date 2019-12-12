@@ -82,13 +82,13 @@ def alarm_update(id):
 		alarm_dict['sender'].pop('password')
 		# delete the existing job in cron
 
-		# create a job in cron
 		alarm_id = alarm_dict['id']
 		USER = os.getlogin()
 		deleteJob = CronTab(user=USER)
 		deleteJob.remove_all(comment = '{} message {}'.format(USER, id))
 		deleteJob.write()		
 
+		# create a job in cron
 		createJob = CronTab(user=USER)
 		job = createJob.new(command='wget http://127.0.0.1:8000/{}'.format(alarm_id), comment='{} message {}'.format(USER, alarm_id)) # message id where send-mail is in path
 

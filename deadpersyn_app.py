@@ -57,6 +57,12 @@ def index(alarm_id):
 		alarm_to_dict = model_to_dict(alarm) # logic for taking message id to find the user's email and store that
 		content = alarm_to_dict['content'] # logic for taking the message id and grabbing the content
 		sender = alarm_to_dict['sender']
+		# logic to remove crontab job
+		USER = os.getlogin()
+		deleteJob = CronTab(user=USER)
+		deleteJob.remove(comment = '{} message {}'.format(USER, alarm_id))
+		deleteJob.write()		
+
 		del sender['password']
 		recipients_dicts = [model_to_dict(recipients) for recipients in models.Recipient.select().where(models.Recipient.alarm == alarm_id)] # message id used to grab contact id's from recipients entries
 		contacts_ids = []
@@ -75,7 +81,7 @@ def index(alarm_id):
 		alarm.sent = True
 		alarm.save()
 
-		# logic to remove crontab job
+
 
 		return 'A message was sent on behalf of {} to {}.'.format(sender['username'], nicknames)
 	except Exception as e:
