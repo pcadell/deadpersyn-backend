@@ -77,8 +77,28 @@ def alarm_update(id):
 		alarm.content = payload['content'] if 'content' in payload else None
 		alarm.time = payload['time'] if 'time' in payload else None 
 		alarm.save()
+
 		alarm_dict = model_to_dict(alarm)
 		alarm_dict['sender'].pop('password')
+		# delete the existing job in cron
+
+		# create a job in cron
+		alarm_id = alarm_dict['id']
+		USER = os.getlogin()
+		deleteJob = CronTab(user=USER)
+		deleteJob.remove_all(comment = '{} message {}'.format(USER, id))
+		deleteJob.write()		
+
+		createJob = CronTab(user=USER)
+		job = createJob.new(command='wget http://127.0.0.1:8000/{}'.format(alarm_id), comment='{} message {}'.format(USER, alarm_id)) # message id where send-mail is in path
+
+		# set the time to crontab via math 
+		setTime = isoparse(alarm_dict['time'])
+		timediffCST = datetime.timedelta(hours=-6)
+		correctedTime = setTime + timediffCST
+		job.setall(correctedTime)  #datetime(setTime))
+		createJob.write()
+
 		return jsonify(data=alarm_dict, status={'code': 200, 'message': 'Alarm updated successfully!'}), 200
 	else:
 		return jsonify(data='Forbidden', status={'code': 403, 'message': 'Cannot show you someone else\'s data'}), 403
@@ -92,7 +112,6 @@ def alarm_delete(id):
 	if (alarm_to_delete.sender.id == current_user.id):
 		USER = os.getlogin()
 		deleteJob = CronTab(user=USER)
-	#	job = deleteJob.find_comment('{} message {}'.format(USER, id))
 		deleteJob.remove_all(comment = '{} message {}'.format(USER, id))
 		deleteJob.write()		
 		alarm_to_delete.delete_instance()
