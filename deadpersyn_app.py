@@ -11,6 +11,8 @@ from resources.alarms import alarms
 from resources.recipients import recipients
 from crontab import CronTab
 import os
+#from flask_apscheduler import APScheduler
+#import time
 
 app = Flask(__name__)
 app.config.from_envvar('APP_SETTINGS') #pointing to config file set in environs
@@ -58,10 +60,10 @@ def index(alarm_id):
 		content = alarm_to_dict['content'] # logic for taking the message id and grabbing the content
 		sender = alarm_to_dict['sender']
 		# logic to remove crontab job
-		USER = os.getlogin()
-		deleteJob = CronTab(user=USER)
-		deleteJob.remove(comment = '{} message {}'.format(USER, alarm_id))
-		deleteJob.write()		
+#		USER = os.getlogin()
+#		deleteJob = CronTab(user=USER)
+#		deleteJob.remove(comment = '{} message {}'.format(USER, alarm_id))
+#		deleteJob.write()		
 
 		del sender['password']
 		recipients_dicts = [model_to_dict(recipients) for recipients in models.Recipient.select().where(models.Recipient.alarm == alarm_id)] # message id used to grab contact id's from recipients entries
