@@ -11,7 +11,12 @@ class User(UserMixin, Model):
 	# should hold email server information:
 	# email_pass, or should that be same as password above?
 	# email_settings including encryption, port, smtp address?
-	# or maybe these get set into environmental variable to be reset if something changes?
+	mail_server = CharField(default='default')
+	mail_port = IntegerField(default=587)
+	mail_use_tls = BooleanField(default=True)
+	mail_use_ssl = BooleanField(default=False)
+	mail_username = CharField(default='None')
+	mail_password = CharField(default='None')
 	class Meta:
 		database = DATABASE
 
