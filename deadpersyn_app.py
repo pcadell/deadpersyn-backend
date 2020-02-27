@@ -63,7 +63,7 @@ def index(alarm_id):
 #		USER = os.getlogin()
 #		deleteJob = CronTab(user=USER)
 #		deleteJob.remove(comment = '{} message {}'.format(USER, alarm_id))
-#		deleteJob.write()		
+#		deleteJob.write()
 
 		del sender['password']
 		recipients_dicts = [model_to_dict(recipients) for recipients in models.Recipient.select().where(models.Recipient.alarm == alarm_id)] # message id used to grab contact id's from recipients entries

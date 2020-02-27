@@ -65,10 +65,12 @@ def update_user(id):
 	else:
 		user.email = payload['email'].lower() if 'email' in payload else None
 		user.password = generate_password_hash(payload['password']) if 'password' in payload else None
+		user.mail_password = generate_password_hash(payload['mail_password']) if 'password' != 'None' in payload else None
 		user.username = payload['username'] if 'username' in payload else None
 		user.save()
 		user_dict = model_to_dict(user)
 		del user_dict['password']
+		del user_dict['mail_password']
 		return jsonify(data=user_dict, status={'code': 200, 'message': '{} profile updated successfully'.format(user_dict['username'])}), 200
 
 # For dev purposed, checking what user is logged in currently

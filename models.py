@@ -8,9 +8,6 @@ class User(UserMixin, Model):
 	username = CharField(unique = True)
 	email = CharField(unique = True)
 	password = CharField()
-	# should hold email server information:
-	# email_pass, or should that be same as password above?
-	# email_settings including encryption, port, smtp address?
 	mail_server = CharField(default='default')
 	mail_port = IntegerField(default=587)
 	mail_use_tls = BooleanField(default=True)
